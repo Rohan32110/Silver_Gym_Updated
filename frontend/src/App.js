@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Link, useNavigate, Navigate } from 'react-router-dom';
 import axios from 'axios';
+import { Star, CheckCircle, Target, Award, Users, Clock, BarChart3, Dumbbell, LogIn, UserPlus, Menu, X } from 'lucide-react';
 import './App.css';
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
@@ -63,33 +64,36 @@ const useAuth = () => React.useContext(AuthContext);
 const Navbar = () => {
   const { user, isAdmin, logout } = useAuth();
   const navigate = useNavigate();
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const handleLogout = () => {
     logout();
     navigate('/');
+    setIsMenuOpen(false);
   };
 
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 bg-black/20 backdrop-blur-md border-b border-white/10">
+    <nav className="fixed top-0 left-0 right-0 z-50 bg-black/30 backdrop-blur-xl border-b border-white/10">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
-          <Link to="/" className="text-2xl font-bold bg-gradient-to-r from-gray-200 to-gray-400 bg-clip-text text-transparent">
+          <Link to="/" className="text-2xl font-bold bg-gradient-to-r from-gray-100 to-gray-300 bg-clip-text text-transparent">
             Silver Gym
           </Link>
           
           <div className="hidden md:flex space-x-8">
-            <Link to="/" className="text-gray-300 hover:text-white transition-colors">Home</Link>
-            <Link to="/about" className="text-gray-300 hover:text-white transition-colors">About</Link>
-            <Link to="/membership" className="text-gray-300 hover:text-white transition-colors">Membership</Link>
-            <Link to="/trainers" className="text-gray-300 hover:text-white transition-colors">Trainers</Link>
-            <Link to="/services" className="text-gray-300 hover:text-white transition-colors">Services</Link>
+            <Link to="/" className="nav-link text-gray-300 hover:text-white transition-all duration-300">Home</Link>
+            <Link to="/about" className="nav-link text-gray-300 hover:text-white transition-all duration-300">About</Link>
+            <Link to="/membership" className="nav-link text-gray-300 hover:text-white transition-all duration-300">Membership</Link>
+            <Link to="/trainers" className="nav-link text-gray-300 hover:text-white transition-all duration-300">Trainers</Link>
+            <Link to="/services" className="nav-link text-gray-300 hover:text-white transition-all duration-300">Services</Link>
           </div>
 
-          <div className="flex space-x-4">
+          <div className="hidden md:flex items-center space-x-3">
             {user ? (
               <>
-                <Link to="/dashboard" className="bg-gradient-to-r from-blue-500 to-purple-600 text-white px-4 py-2 rounded-lg hover:from-blue-600 hover:to-purple-700 transition-all">
-                  Dashboard
+                <Link to="/dashboard" className="btn-gradient flex items-center space-x-2 px-4 py-2 rounded-lg font-semibold transition-all duration-300 transform hover:scale-105">
+                  <BarChart3 size={18} />
+                  <span>Dashboard</span>
                 </Link>
                 <button onClick={handleLogout} className="text-gray-300 hover:text-white transition-colors">
                   Logout
@@ -97,8 +101,9 @@ const Navbar = () => {
               </>
             ) : isAdmin ? (
               <>
-                <Link to="/admin" className="bg-gradient-to-r from-green-500 to-teal-600 text-white px-4 py-2 rounded-lg hover:from-green-600 hover:to-teal-700 transition-all">
-                  Admin Panel
+                <Link to="/admin" className="btn-gradient-green flex items-center space-x-2 px-4 py-2 rounded-lg font-semibold transition-all duration-300 transform hover:scale-105">
+                  <Users size={18} />
+                  <span>Admin Panel</span>
                 </Link>
                 <button onClick={handleLogout} className="text-gray-300 hover:text-white transition-colors">
                   Logout
@@ -106,16 +111,72 @@ const Navbar = () => {
               </>
             ) : (
               <>
-                <Link to="/login" className="text-gray-300 hover:text-white transition-colors">
-                  Login
+                <Link to="/login" className="flex items-center space-x-2 text-gray-300 hover:text-white transition-all duration-300">
+                  <LogIn size={18} />
+                  <span>Login</span>
                 </Link>
-                <Link to="/signup" className="bg-gradient-to-r from-blue-500 to-purple-600 text-white px-4 py-2 rounded-lg hover:from-blue-600 hover:to-purple-700 transition-all">
-                  Sign Up
+                <Link to="/signup" className="btn-gradient flex items-center space-x-2 px-4 py-2 rounded-lg font-semibold transition-all duration-300 transform hover:scale-105">
+                  <UserPlus size={18} />
+                  <span>Sign Up</span>
                 </Link>
               </>
             )}
           </div>
+
+          {/* Mobile menu button */}
+          <button
+            onClick={() => setIsMenuOpen(!isMenuOpen)}
+            className="md:hidden text-gray-300 hover:text-white"
+          >
+            {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
+          </button>
         </div>
+
+        {/* Mobile menu */}
+        {isMenuOpen && (
+          <div className="md:hidden bg-black/50 backdrop-blur-xl border-t border-white/10 py-4">
+            <div className="flex flex-col space-y-4">
+              <Link to="/" className="text-gray-300 hover:text-white transition-colors" onClick={() => setIsMenuOpen(false)}>Home</Link>
+              <Link to="/about" className="text-gray-300 hover:text-white transition-colors" onClick={() => setIsMenuOpen(false)}>About</Link>
+              <Link to="/membership" className="text-gray-300 hover:text-white transition-colors" onClick={() => setIsMenuOpen(false)}>Membership</Link>
+              <Link to="/trainers" className="text-gray-300 hover:text-white transition-colors" onClick={() => setIsMenuOpen(false)}>Trainers</Link>
+              <Link to="/services" className="text-gray-300 hover:text-white transition-colors" onClick={() => setIsMenuOpen(false)}>Services</Link>
+              
+              {user ? (
+                <>
+                  <Link to="/dashboard" className="btn-gradient flex items-center space-x-2 px-4 py-2 rounded-lg font-semibold w-fit" onClick={() => setIsMenuOpen(false)}>
+                    <BarChart3 size={18} />
+                    <span>Dashboard</span>
+                  </Link>
+                  <button onClick={handleLogout} className="text-gray-300 hover:text-white transition-colors text-left">
+                    Logout
+                  </button>
+                </>
+              ) : isAdmin ? (
+                <>
+                  <Link to="/admin" className="btn-gradient-green flex items-center space-x-2 px-4 py-2 rounded-lg font-semibold w-fit" onClick={() => setIsMenuOpen(false)}>
+                    <Users size={18} />
+                    <span>Admin Panel</span>
+                  </Link>
+                  <button onClick={handleLogout} className="text-gray-300 hover:text-white transition-colors text-left">
+                    Logout
+                  </button>
+                </>
+              ) : (
+                <>
+                  <Link to="/login" className="flex items-center space-x-2 text-gray-300 hover:text-white transition-colors" onClick={() => setIsMenuOpen(false)}>
+                    <LogIn size={18} />
+                    <span>Login</span>
+                  </Link>
+                  <Link to="/signup" className="btn-gradient flex items-center space-x-2 px-4 py-2 rounded-lg font-semibold w-fit" onClick={() => setIsMenuOpen(false)}>
+                    <UserPlus size={18} />
+                    <span>Sign Up</span>
+                  </Link>
+                </>
+              )}
+            </div>
+          </div>
+        )}
       </div>
     </nav>
   );
@@ -123,24 +184,26 @@ const Navbar = () => {
 
 const Home = () => {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-800">
+    <div className="min-h-screen hero-gradient">
       <div className="pt-16">
         {/* Hero Section */}
         <section className="min-h-screen flex items-center justify-center px-4">
           <div className="text-center max-w-4xl mx-auto">
             <h1 className="text-6xl md:text-8xl font-bold mb-6">
               <span className="text-white">Transform Your Body at </span>
-              <span className="bg-gradient-to-r from-gray-200 to-gray-400 bg-clip-text text-transparent">Silver Gym</span>
+              <span className="bg-gradient-to-r from-gray-100 to-gray-300 bg-clip-text text-transparent">Silver Gym</span>
             </h1>
             <p className="text-xl md:text-2xl text-gray-300 mb-8 max-w-3xl mx-auto">
               The ultimate destination for men who want to build strength, muscle, and confidence. Professional training, premium equipment, and a brotherhood that pushes you beyond limits.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link to="/signup" className="bg-gradient-to-r from-blue-500 to-purple-600 text-white px-8 py-4 rounded-lg text-lg font-semibold hover:from-blue-600 hover:to-purple-700 transition-all transform hover:scale-105">
-                Join Silver Gym
+              <Link to="/signup" className="btn-gradient flex items-center justify-center space-x-2 px-8 py-4 rounded-xl text-lg font-semibold transition-all duration-300 transform hover:scale-105 hover:shadow-xl">
+                <UserPlus size={20} />
+                <span>Join Silver Gym</span>
               </Link>
-              <Link to="/membership" className="bg-white/10 backdrop-blur-sm border border-white/20 text-white px-8 py-4 rounded-lg text-lg font-semibold hover:bg-white/20 transition-all">
-                View Membership
+              <Link to="/membership" className="btn-secondary flex items-center justify-center space-x-2 px-8 py-4 rounded-xl text-lg font-semibold transition-all duration-300 transform hover:scale-105">
+                <Target size={20} />
+                <span>View Membership</span>
               </Link>
             </div>
           </div>
@@ -149,45 +212,45 @@ const Home = () => {
         {/* Why Choose Silver Gym Section */}
         <section className="py-20 px-4">
           <div className="max-w-7xl mx-auto">
-            <h2 className="text-4xl md:text-5xl font-bold text-center mb-16 bg-gradient-to-r from-gray-200 to-gray-400 bg-clip-text text-transparent">
+            <h2 className="text-4xl md:text-5xl font-bold text-center mb-16 bg-gradient-to-r from-gray-100 to-gray-300 bg-clip-text text-transparent">
               Why Choose Silver Gym?
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {[
                 {
-                  icon: "🎯",
+                  icon: <Target className="icon-hover" size={32} />,
                   title: "Professional Training",
                   description: "Expert trainers guide you through beginner to advanced levels with personalized workout plans."
                 },
                 {
-                  icon: "🏆",
+                  icon: <Award className="icon-hover" size={32} />,
                   title: "Achievement System",
                   description: "Earn stars for every completed exercise and track your daily progress with our gamified system."
                 },
                 {
-                  icon: "👥",
+                  icon: <Users className="icon-hover" size={32} />,
                   title: "Brotherhood Community",
                   description: "Join a community of dedicated men committed to fitness excellence and mutual motivation."
                 },
                 {
-                  icon: "📊",
+                  icon: <BarChart3 className="icon-hover" size={32} />,
                   title: "Digital Dashboard",
                   description: "Access your personal training dashboard with guided exercises and progress tracking."
                 },
                 {
-                  icon: "💪",
+                  icon: <Dumbbell className="icon-hover" size={32} />,
                   title: "Premium Equipment",
                   description: "State-of-the-art fitness equipment and facilities designed for maximum performance and safety."
                 },
                 {
-                  icon: "🕐",
+                  icon: <Clock className="icon-hover" size={32} />,
                   title: "Flexible Scheduling",
                   description: "Train on your schedule with 24/7 access and flexible workout timing that fits your lifestyle."
                 }
               ].map((feature, index) => (
-                <div key={index} className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl p-6 hover:bg-white/10 transition-all duration-300">
-                  <div className="text-4xl mb-4 bg-gray-600 w-16 h-16 rounded-full flex items-center justify-center">
-                    <span className="text-2xl">{feature.icon}</span>
+                <div key={index} className="feature-card glass-card p-6 hover:glass-card-hover transition-all duration-300 transform hover:scale-105">
+                  <div className="text-gray-300 mb-4 bg-gradient-to-br from-gray-700 to-gray-800 w-16 h-16 rounded-full flex items-center justify-center">
+                    {feature.icon}
                   </div>
                   <h3 className="text-xl font-semibold text-white mb-3">{feature.title}</h3>
                   <p className="text-gray-300">{feature.description}</p>
@@ -200,22 +263,23 @@ const Home = () => {
         {/* Sign Up Section */}
         <section className="py-20 px-4">
           <div className="max-w-4xl mx-auto text-center">
-            <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-8">
+            <div className="glass-card p-8 hover:glass-card-hover transition-all duration-300">
               <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">Ready to Transform?</h2>
               <p className="text-gray-300 mb-8">Join Silver Gym today and start your journey to becoming the strongest version of yourself.</p>
-              <Link to="/signup" className="bg-gradient-to-r from-blue-500 to-purple-600 text-white px-8 py-4 rounded-lg text-lg font-semibold hover:from-blue-600 hover:to-purple-700 transition-all transform hover:scale-105 inline-block">
-                Start Your Journey
+              <Link to="/signup" className="btn-gradient flex items-center justify-center space-x-2 px-8 py-4 rounded-xl text-lg font-semibold transition-all duration-300 transform hover:scale-105 hover:shadow-xl inline-flex">
+                <UserPlus size={20} />
+                <span>Start Your Journey</span>
               </Link>
             </div>
           </div>
         </section>
 
         {/* Footer */}
-        <footer className="bg-black/50 backdrop-blur-sm border-t border-white/10 py-12 px-4">
+        <footer className="bg-black/50 backdrop-blur-xl border-t border-white/10 py-12 px-4">
           <div className="max-w-7xl mx-auto">
             <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
               <div>
-                <h3 className="text-2xl font-bold bg-gradient-to-r from-gray-200 to-gray-400 bg-clip-text text-transparent mb-4">Silver Gym</h3>
+                <h3 className="text-2xl font-bold bg-gradient-to-r from-gray-100 to-gray-300 bg-clip-text text-transparent mb-4">Silver Gym</h3>
                 <p className="text-gray-400">The ultimate destination for men's fitness and strength training.</p>
               </div>
               <div>
@@ -253,8 +317,8 @@ const Home = () => {
 const About = () => (
   <div className="min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-800 pt-16">
     <div className="max-w-4xl mx-auto px-4 py-20">
-      <h1 className="text-5xl font-bold text-center mb-8 bg-gradient-to-r from-gray-200 to-gray-400 bg-clip-text text-transparent">About Silver Gym</h1>
-      <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl p-8">
+      <h1 className="text-5xl font-bold text-center mb-8 bg-gradient-to-r from-gray-100 to-gray-300 bg-clip-text text-transparent">About Silver Gym</h1>
+      <div className="glass-card p-8">
         <p className="text-gray-300 text-lg leading-relaxed">
           Silver Gym is more than just a fitness center – it's a brotherhood dedicated to helping men achieve their peak physical potential. 
           Founded with the vision of creating the ultimate training environment, we provide state-of-the-art equipment, expert guidance, 
@@ -268,20 +332,36 @@ const About = () => (
 const Membership = () => (
   <div className="min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-800 pt-16">
     <div className="max-w-4xl mx-auto px-4 py-20 text-center">
-      <h1 className="text-5xl font-bold mb-8 bg-gradient-to-r from-gray-200 to-gray-400 bg-clip-text text-transparent">Membership</h1>
-      <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl p-8">
+      <h1 className="text-5xl font-bold mb-8 bg-gradient-to-r from-gray-100 to-gray-300 bg-clip-text text-transparent">Membership</h1>
+      <div className="glass-card p-8 hover:glass-card-hover transition-all duration-300">
         <h2 className="text-3xl font-bold text-white mb-4">Silver Membership</h2>
         <div className="text-6xl font-bold text-blue-400 mb-4">৳500</div>
         <p className="text-gray-300 text-xl mb-8">Per Month</p>
         <ul className="text-gray-300 space-y-3 mb-8">
-          <li>✓ Access to all gym equipment</li>
-          <li>✓ Personal training dashboard</li>
-          <li>✓ Exercise tracking with star rewards</li>
-          <li>✓ Community access</li>
-          <li>✓ 24/7 gym access</li>
+          <li className="flex items-center justify-center space-x-2">
+            <CheckCircle size={20} className="text-green-400" />
+            <span>Access to all gym equipment</span>
+          </li>
+          <li className="flex items-center justify-center space-x-2">
+            <CheckCircle size={20} className="text-green-400" />
+            <span>Personal training dashboard</span>
+          </li>
+          <li className="flex items-center justify-center space-x-2">
+            <CheckCircle size={20} className="text-green-400" />
+            <span>Exercise tracking with star rewards</span>
+          </li>
+          <li className="flex items-center justify-center space-x-2">
+            <CheckCircle size={20} className="text-green-400" />
+            <span>Community access</span>
+          </li>
+          <li className="flex items-center justify-center space-x-2">
+            <CheckCircle size={20} className="text-green-400" />
+            <span>24/7 gym access</span>
+          </li>
         </ul>
-        <Link to="/signup" className="bg-gradient-to-r from-blue-500 to-purple-600 text-white px-8 py-4 rounded-lg text-lg font-semibold hover:from-blue-600 hover:to-purple-700 transition-all inline-block">
-          Join Now
+        <Link to="/signup" className="btn-gradient flex items-center justify-center space-x-2 px-8 py-4 rounded-xl text-lg font-semibold transition-all duration-300 transform hover:scale-105 hover:shadow-xl inline-flex">
+          <UserPlus size={20} />
+          <span>Join Now</span>
         </Link>
       </div>
     </div>
@@ -291,16 +371,16 @@ const Membership = () => (
 const Trainers = () => (
   <div className="min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-800 pt-16">
     <div className="max-w-6xl mx-auto px-4 py-20">
-      <h1 className="text-5xl font-bold text-center mb-16 bg-gradient-to-r from-gray-200 to-gray-400 bg-clip-text text-transparent">Our Trainers</h1>
+      <h1 className="text-5xl font-bold text-center mb-16 bg-gradient-to-r from-gray-100 to-gray-300 bg-clip-text text-transparent">Our Trainers</h1>
       <div className="grid md:grid-cols-3 gap-8">
         {[
           { name: "Ahmed Khan", specialty: "Strength Training", experience: "8 years" },
           { name: "Rakib Hasan", specialty: "Bodybuilding", experience: "6 years" },
           { name: "Sabbir Ahmed", specialty: "Functional Fitness", experience: "5 years" }
         ].map((trainer, index) => (
-          <div key={index} className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl p-6 text-center">
-            <div className="w-24 h-24 bg-gray-600 rounded-full mx-auto mb-4 flex items-center justify-center">
-              <span className="text-2xl">👨‍💪</span>
+          <div key={index} className="glass-card p-6 text-center hover:glass-card-hover transition-all duration-300 transform hover:scale-105">
+            <div className="w-24 h-24 bg-gradient-to-br from-gray-600 to-gray-700 rounded-full mx-auto mb-4 flex items-center justify-center">
+              <Dumbbell size={32} className="text-gray-300" />
             </div>
             <h3 className="text-xl font-semibold text-white mb-2">{trainer.name}</h3>
             <p className="text-blue-400 mb-2">{trainer.specialty}</p>
@@ -315,7 +395,7 @@ const Trainers = () => (
 const Services = () => (
   <div className="min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-800 pt-16">
     <div className="max-w-6xl mx-auto px-4 py-20">
-      <h1 className="text-5xl font-bold text-center mb-16 bg-gradient-to-r from-gray-200 to-gray-400 bg-clip-text text-transparent">Our Services</h1>
+      <h1 className="text-5xl font-bold text-center mb-16 bg-gradient-to-r from-gray-100 to-gray-300 bg-clip-text text-transparent">Our Services</h1>
       <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
         {[
           "Personal Training",
@@ -325,7 +405,10 @@ const Services = () => (
           "Functional Movement Assessment",
           "Recovery & Rehabilitation"
         ].map((service, index) => (
-          <div key={index} className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl p-6">
+          <div key={index} className="glass-card p-6 hover:glass-card-hover transition-all duration-300 transform hover:scale-105">
+            <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg mb-4 flex items-center justify-center">
+              <Target size={24} className="text-white" />
+            </div>
             <h3 className="text-xl font-semibold text-white mb-3">{service}</h3>
             <p className="text-gray-400">Professional {service.toLowerCase()} services tailored to your fitness goals.</p>
           </div>
@@ -338,30 +421,34 @@ const Services = () => (
 const Signup = () => {
   const [formData, setFormData] = useState({ username: '', email: '', password: '' });
   const [message, setMessage] = useState('');
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
     try {
       await axios.post(`${API}/auth/signup`, formData);
       setMessage('Registration successful! Please wait for admin approval.');
       setTimeout(() => navigate('/'), 2000);
     } catch (error) {
       setMessage(error.response?.data?.detail || 'Registration failed');
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-800 pt-16 flex items-center justify-center px-4">
-      <div className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-xl p-8 w-full max-w-md">
-        <h2 className="text-3xl font-bold text-center mb-6 bg-gradient-to-r from-gray-200 to-gray-400 bg-clip-text text-transparent">Join Silver Gym</h2>
+      <div className="glass-card p-8 w-full max-w-md">
+        <h2 className="text-3xl font-bold text-center mb-6 bg-gradient-to-r from-gray-100 to-gray-300 bg-clip-text text-transparent">Join Silver Gym</h2>
         <form onSubmit={handleSubmit} className="space-y-4">
           <input
             type="text"
             placeholder="Username"
             value={formData.username}
             onChange={(e) => setFormData({...formData, username: e.target.value})}
-            className="w-full p-3 bg-white/10 border border-white/20 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="form-input w-full p-3 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
             required
           />
           <input
@@ -369,7 +456,7 @@ const Signup = () => {
             placeholder="Email"
             value={formData.email}
             onChange={(e) => setFormData({...formData, email: e.target.value})}
-            className="w-full p-3 bg-white/10 border border-white/20 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="form-input w-full p-3 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
             required
           />
           <input
@@ -377,14 +464,19 @@ const Signup = () => {
             placeholder="Password"
             value={formData.password}
             onChange={(e) => setFormData({...formData, password: e.target.value})}
-            className="w-full p-3 bg-white/10 border border-white/20 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="form-input w-full p-3 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
             required
           />
-          <button type="submit" className="w-full bg-gradient-to-r from-blue-500 to-purple-600 text-white py-3 rounded-lg font-semibold hover:from-blue-600 hover:to-purple-700 transition-all">
-            Sign Up
+          <button 
+            type="submit" 
+            disabled={loading}
+            className="btn-gradient w-full py-3 rounded-lg font-semibold transition-all duration-300 transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center space-x-2"
+          >
+            <UserPlus size={20} />
+            <span>{loading ? 'Signing Up...' : 'Sign Up'}</span>
           </button>
         </form>
-        {message && <p className="mt-4 text-center text-green-400">{message}</p>}
+        {message && <p className={`mt-4 text-center ${message.includes('successful') ? 'text-green-400' : 'text-red-400'}`}>{message}</p>}
         <p className="mt-4 text-center text-gray-400">
           Already have an account? <Link to="/login" className="text-blue-400 hover:underline">Login here</Link>
         </p>
@@ -397,11 +489,13 @@ const Login = () => {
   const [formData, setFormData] = useState({ username: '', password: '' });
   const [isAdmin, setIsAdmin] = useState(false);
   const [message, setMessage] = useState('');
+  const [loading, setLoading] = useState(false);
   const { login } = useAuth();
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
     try {
       const endpoint = isAdmin ? '/auth/admin/login' : '/auth/login';
       const response = await axios.post(`${API}${endpoint}`, formData);
@@ -410,26 +504,28 @@ const Login = () => {
       navigate(isAdmin ? '/admin' : '/dashboard');
     } catch (error) {
       setMessage(error.response?.data?.detail || 'Login failed');
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-800 pt-16 flex items-center justify-center px-4">
-      <div className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-xl p-8 w-full max-w-md">
-        <h2 className="text-3xl font-bold text-center mb-6 bg-gradient-to-r from-gray-200 to-gray-400 bg-clip-text text-transparent">
+      <div className="glass-card p-8 w-full max-w-md">
+        <h2 className="text-3xl font-bold text-center mb-6 bg-gradient-to-r from-gray-100 to-gray-300 bg-clip-text text-transparent">
           {isAdmin ? 'Admin Login' : 'Member Login'}
         </h2>
         
         <div className="flex mb-6">
           <button
             onClick={() => setIsAdmin(false)}
-            className={`flex-1 py-2 rounded-l-lg transition-all ${!isAdmin ? 'bg-blue-500 text-white' : 'bg-white/10 text-gray-400'}`}
+            className={`flex-1 py-2 rounded-l-lg transition-all duration-300 ${!isAdmin ? 'btn-gradient' : 'bg-white/10 text-gray-400 hover:bg-white/20'}`}
           >
             Member
           </button>
           <button
             onClick={() => setIsAdmin(true)}
-            className={`flex-1 py-2 rounded-r-lg transition-all ${isAdmin ? 'bg-green-500 text-white' : 'bg-white/10 text-gray-400'}`}
+            className={`flex-1 py-2 rounded-r-lg transition-all duration-300 ${isAdmin ? 'btn-gradient-green' : 'bg-white/10 text-gray-400 hover:bg-white/20'}`}
           >
             Admin
           </button>
@@ -441,7 +537,7 @@ const Login = () => {
             placeholder="Username"
             value={formData.username}
             onChange={(e) => setFormData({...formData, username: e.target.value})}
-            className="w-full p-3 bg-white/10 border border-white/20 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="form-input w-full p-3 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
             required
           />
           <input
@@ -449,15 +545,18 @@ const Login = () => {
             placeholder="Password"
             value={formData.password}
             onChange={(e) => setFormData({...formData, password: e.target.value})}
-            className="w-full p-3 bg-white/10 border border-white/20 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="form-input w-full p-3 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
             required
           />
-          <button type="submit" className={`w-full py-3 rounded-lg font-semibold transition-all ${
-            isAdmin 
-              ? 'bg-gradient-to-r from-green-500 to-teal-600 hover:from-green-600 hover:to-teal-700' 
-              : 'bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700'
-          } text-white`}>
-            Login
+          <button 
+            type="submit" 
+            disabled={loading}
+            className={`w-full py-3 rounded-lg font-semibold transition-all duration-300 transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center space-x-2 ${
+              isAdmin ? 'btn-gradient-green' : 'btn-gradient'
+            }`}
+          >
+            <LogIn size={20} />
+            <span>{loading ? 'Logging in...' : 'Login'}</span>
           </button>
         </form>
         {message && <p className="mt-4 text-center text-red-400">{message}</p>}
@@ -513,14 +612,20 @@ const Dashboard = () => {
     }
   };
 
-  if (!dashboardData) return <div className="min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-800 pt-16 flex items-center justify-center"><div className="text-white">Loading...</div></div>;
+  if (!dashboardData) return (
+    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-800 pt-16 flex items-center justify-center">
+      <div className="text-white">Loading...</div>
+    </div>
+  );
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-800 pt-16">
       {showCongrats && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
-          <div className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-xl p-8 text-center">
-            <div className="text-6xl mb-4">⭐</div>
+          <div className="glass-card p-8 text-center congrats-modal">
+            <div className="text-6xl mb-4">
+              <Star className="w-16 h-16 text-yellow-400 mx-auto star-bounce" />
+            </div>
             <h3 className="text-2xl font-bold text-white mb-2">Congratulations!</h3>
             <p className="text-gray-300">You earned a star! Keep up the great work!</p>
           </div>
@@ -528,19 +633,23 @@ const Dashboard = () => {
       )}
 
       <div className="max-w-6xl mx-auto px-4 py-8">
-        <h1 className="text-4xl font-bold text-center mb-8 bg-gradient-to-r from-gray-200 to-gray-400 bg-clip-text text-transparent">
+        <h1 className="text-4xl font-bold text-center mb-8 bg-gradient-to-r from-gray-100 to-gray-300 bg-clip-text text-transparent">
           Your Training Dashboard
         </h1>
 
         {/* Stats */}
         <div className="grid md:grid-cols-2 gap-6 mb-8">
-          <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl p-6 text-center">
-            <div className="text-4xl mb-2">⭐</div>
+          <div className="glass-card p-6 text-center hover:glass-card-hover transition-all duration-300">
+            <div className="text-4xl mb-2">
+              <Star className="w-12 h-12 text-yellow-400 mx-auto" />
+            </div>
             <div className="text-3xl font-bold text-yellow-400">{dashboardData.total_stars}</div>
             <div className="text-gray-300">Total Stars</div>
           </div>
-          <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl p-6 text-center">
-            <div className="text-4xl mb-2">✅</div>
+          <div className="glass-card p-6 text-center hover:glass-card-hover transition-all duration-300">
+            <div className="text-4xl mb-2">
+              <CheckCircle className="w-12 h-12 text-green-400 mx-auto" />
+            </div>
             <div className="text-3xl font-bold text-green-400">{dashboardData.completed_today}</div>
             <div className="text-gray-300">Completed Today</div>
           </div>
@@ -554,9 +663,9 @@ const Dashboard = () => {
               <button
                 key={level}
                 onClick={() => setSelectedLevel(level)}
-                className={`px-6 py-3 rounded-lg font-semibold transition-all capitalize ${
+                className={`px-6 py-3 rounded-lg font-semibold transition-all duration-300 capitalize transform hover:scale-105 ${
                   selectedLevel === level 
-                    ? 'bg-gradient-to-r from-blue-500 to-purple-600 text-white' 
+                    ? 'btn-gradient' 
                     : 'bg-white/10 text-gray-300 hover:bg-white/20'
                 }`}
               >
@@ -573,19 +682,29 @@ const Dashboard = () => {
             {exercises.map((exercise) => {
               const isCompleted = dashboardData.today_exercises.includes(exercise.id);
               return (
-                <div key={exercise.id} className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl p-6">
+                <div key={exercise.id} className="glass-card p-6 hover:glass-card-hover transition-all duration-300">
                   <h4 className="text-xl font-semibold text-white mb-3">{exercise.name}</h4>
                   <p className="text-gray-300 mb-4 text-sm">{exercise.description}</p>
                   <button
                     onClick={() => completeExercise(exercise.id)}
                     disabled={isCompleted}
-                    className={`w-full py-2 rounded-lg font-semibold transition-all ${
+                    className={`w-full py-2 rounded-lg font-semibold transition-all duration-300 flex items-center justify-center space-x-2 ${
                       isCompleted 
                         ? 'bg-green-500/50 text-green-300 cursor-not-allowed' 
-                        : 'bg-gradient-to-r from-blue-500 to-purple-600 text-white hover:from-blue-600 hover:to-purple-700'
+                        : 'btn-gradient hover:scale-105'
                     }`}
                   >
-                    {isCompleted ? 'Completed ✓' : 'Mark as Done'}
+                    {isCompleted ? (
+                      <>
+                        <CheckCircle size={18} />
+                        <span>Completed ✓</span>
+                      </>
+                    ) : (
+                      <>
+                        <Target size={18} />
+                        <span>Mark as Done</span>
+                      </>
+                    )}
                   </button>
                 </div>
               );
@@ -600,6 +719,7 @@ const Dashboard = () => {
 const AdminPanel = () => {
   const [users, setUsers] = useState([]);
   const [stats, setStats] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     fetchUsers();
@@ -648,6 +768,7 @@ const AdminPanel = () => {
 
   const resetPayments = async () => {
     if (window.confirm('Are you sure you want to reset all payment statuses to unpaid?')) {
+      setLoading(true);
       try {
         await axios.post(`${API}/admin/reset-payments`);
         fetchUsers();
@@ -655,50 +776,84 @@ const AdminPanel = () => {
         alert('All payment statuses have been reset to unpaid');
       } catch (error) {
         console.error('Failed to reset payments');
+      } finally {
+        setLoading(false);
       }
     }
   };
 
-  if (!stats) return <div className="min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-800 pt-16 flex items-center justify-center"><div className="text-white">Loading...</div></div>;
+  const clearWorkoutData = async () => {
+    if (window.confirm('Are you sure you want to clear all workout data? This will reset all exercise progress but keep user accounts.')) {
+      setLoading(true);
+      try {
+        await axios.post(`${API}/admin/clear-workout-data`);
+        alert('All workout data has been cleared');
+      } catch (error) {
+        console.error('Failed to clear workout data');
+        alert('Failed to clear workout data');
+      } finally {
+        setLoading(false);
+      }
+    }
+  };
+
+  if (!stats) return (
+    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-800 pt-16 flex items-center justify-center">
+      <div className="text-white">Loading...</div>
+    </div>
+  );
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-800 pt-16">
       <div className="max-w-7xl mx-auto px-4 py-8">
         <div className="flex justify-between items-center mb-8">
-          <h1 className="text-4xl font-bold bg-gradient-to-r from-gray-200 to-gray-400 bg-clip-text text-transparent">Admin Panel</h1>
-          <button onClick={fetchUsers} className="bg-gradient-to-r from-blue-500 to-purple-600 text-white px-4 py-2 rounded-lg hover:from-blue-600 hover:to-purple-700 transition-all">
-            🔄 Refresh
+          <h1 className="text-4xl font-bold bg-gradient-to-r from-gray-100 to-gray-300 bg-clip-text text-transparent">Admin Panel</h1>
+          <button onClick={fetchUsers} className="btn-gradient flex items-center space-x-2 px-4 py-2 rounded-lg transition-all duration-300 transform hover:scale-105">
+            <BarChart3 size={18} />
+            <span>Refresh</span>
           </button>
         </div>
 
         {/* Stats */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-8">
-          <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl p-6 text-center">
+          <div className="glass-card p-6 text-center hover:glass-card-hover transition-all duration-300">
             <div className="text-3xl font-bold text-white">{stats.total_users}</div>
-            <div className="text-gray-300">Total Users</div>
+            <div className="text-gray-300 flex items-center justify-center space-x-1">
+              <Users size={16} />
+              <span>Total Users</span>
+            </div>
           </div>
-          <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl p-6 text-center">
+          <div className="glass-card p-6 text-center hover:glass-card-hover transition-all duration-300">
             <div className="text-3xl font-bold text-yellow-400">{stats.pending_approval}</div>
-            <div className="text-gray-300">Pending Approval</div>
+            <div className="text-gray-300 flex items-center justify-center space-x-1">
+              <Clock size={16} />
+              <span>Pending Approval</span>
+            </div>
           </div>
-          <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl p-6 text-center">
+          <div className="glass-card p-6 text-center hover:glass-card-hover transition-all duration-300">
             <div className="text-3xl font-bold text-green-400">{stats.active_members}</div>
-            <div className="text-gray-300">Active Members</div>
+            <div className="text-gray-300 flex items-center justify-center space-x-1">
+              <CheckCircle size={16} />
+              <span>Active Members</span>
+            </div>
           </div>
-          <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl p-6 text-center">
+          <div className="glass-card p-6 text-center hover:glass-card-hover transition-all duration-300">
             <div className="text-3xl font-bold text-blue-400">{stats.paid_members}</div>
-            <div className="text-gray-300">Paid Members</div>
+            <div className="text-gray-300 flex items-center justify-center space-x-1">
+              <Award size={16} />
+              <span>Paid Members</span>
+            </div>
           </div>
         </div>
 
         {/* User Management */}
-        <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl p-6">
+        <div className="glass-card p-6 mb-8">
           <h2 className="text-2xl font-bold text-white mb-6">User Management</h2>
           <p className="text-gray-400 text-sm mb-4">Auto-refresh: Every 30 seconds | Last updated: {new Date().toLocaleTimeString()}</p>
           
           <div className="space-y-4">
             {users.map((user) => (
-              <div key={user.id} className="bg-white/5 border border-white/10 rounded-lg p-4">
+              <div key={user.id} className="glass-card border border-white/10 rounded-lg p-4 hover:glass-card-hover transition-all duration-300">
                 <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                   <div>
                     <h3 className="text-white font-semibold">{user.username}</h3>
@@ -728,7 +883,7 @@ const AdminPanel = () => {
                     {user.status === 'pending' && (
                       <button
                         onClick={() => updateUser(user.id, { status: 'approved' })}
-                        className="bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded text-sm transition-colors"
+                        className="bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded text-sm transition-all duration-300 transform hover:scale-105"
                       >
                         Approve
                       </button>
@@ -737,7 +892,7 @@ const AdminPanel = () => {
                     {user.status === 'approved' && user.payment_status === 'unpaid' && (
                       <button
                         onClick={() => updateUser(user.id, { payment_status: 'paid' })}
-                        className="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded text-sm transition-colors"
+                        className="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded text-sm transition-all duration-300 transform hover:scale-105"
                       >
                         Mark as Paid
                       </button>
@@ -746,7 +901,7 @@ const AdminPanel = () => {
                     {user.status === 'approved' && user.payment_status === 'paid' && (
                       <button
                         onClick={() => updateUser(user.id, { payment_status: 'unpaid' })}
-                        className="bg-orange-500 hover:bg-orange-600 text-white px-3 py-1 rounded text-sm transition-colors"
+                        className="bg-orange-500 hover:bg-orange-600 text-white px-3 py-1 rounded text-sm transition-all duration-300 transform hover:scale-105"
                       >
                         Mark as Unpaid
                       </button>
@@ -754,7 +909,7 @@ const AdminPanel = () => {
                     
                     <button
                       onClick={() => deleteUser(user.id)}
-                      className="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded text-sm transition-colors"
+                      className="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded text-sm transition-all duration-300 transform hover:scale-105"
                     >
                       Remove
                     </button>
@@ -763,16 +918,34 @@ const AdminPanel = () => {
               </div>
             ))}
           </div>
+        </div>
 
-          {/* Reset Payments Button */}
-          <div className="mt-8 pt-6 border-t border-white/10">
+        {/* Admin Actions */}
+        <div className="glass-card p-6">
+          <h2 className="text-2xl font-bold text-white mb-6">Admin Actions</h2>
+          <div className="flex flex-wrap gap-4">
             <button
               onClick={resetPayments}
-              className="bg-red-500 hover:bg-red-600 text-white px-6 py-3 rounded-lg font-semibold transition-colors"
+              disabled={loading}
+              className="bg-orange-500 hover:bg-orange-600 disabled:opacity-50 text-white px-6 py-3 rounded-lg font-semibold transition-all duration-300 transform hover:scale-105 disabled:hover:scale-100"
             >
-              Reset All Payments
+              {loading ? 'Processing...' : 'Reset All Payments'}
             </button>
-            <p className="text-gray-400 text-sm mt-2">This will mark all users as unpaid. Use at the start of each month.</p>
+            <button
+              onClick={clearWorkoutData}
+              disabled={loading}
+              className="bg-red-500 hover:bg-red-600 disabled:opacity-50 text-white px-6 py-3 rounded-lg font-semibold transition-all duration-300 transform hover:scale-105 disabled:hover:scale-100"
+            >
+              {loading ? 'Processing...' : 'Clear All Workout Data'}
+            </button>
+          </div>
+          <div className="mt-4 space-y-2">
+            <p className="text-gray-400 text-sm">
+              <strong>Reset Payments:</strong> Marks all users as unpaid. Use at the start of each month.
+            </p>
+            <p className="text-gray-400 text-sm">
+              <strong>Clear Workout Data:</strong> Removes all exercise progress and stars. User accounts remain intact.
+            </p>
           </div>
         </div>
       </div>

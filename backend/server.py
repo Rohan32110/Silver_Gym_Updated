@@ -1,4 +1,4 @@
-from fastapi import FastAPI, APIRouter, HTTPException, Depends, status
+from fastapi import FastAPI, APIRouter, HTTPException, Depends, status, BackgroundTasks
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from dotenv import load_dotenv
 from starlette.middleware.cors import CORSMiddleware
@@ -13,6 +13,7 @@ from datetime import datetime, timedelta
 from passlib.context import CryptContext
 import jwt
 from enum import Enum
+import asyncio
 
 ROOT_DIR = Path(__file__).parent
 load_dotenv(ROOT_DIR / '.env')
@@ -129,6 +130,26 @@ async def get_current_admin(credentials: HTTPAuthorizationCredentials = Depends(
     except jwt.PyJWTError:
         raise HTTPException(status_code=401, detail="Invalid token")
 
+# Background task for daily reset
+async def daily_reset_task():
+    while True:
+        now = datetime.utcnow()
+        # Calculate time until 11:59 PM UTC
+        next_reset = now.replace(hour=23, minute=59, second=0, microsecond=0)
+        if now >= next_reset:
+            next_reset += timedelta(days=1)
+        
+        sleep_seconds = (next_reset - now).total_seconds()
+        await asyncio.sleep(sleep_seconds)
+        
+        # Reset all daily progress
+        try:
+            await db.progress.delete_many({})
+            await db.users.update_many({}, {"$set": {"total_stars": 0}})
+            print(f"Daily reset completed at {datetime.utcnow()}")
+        except Exception as e:
+            print(f"Error during daily reset: {e}")
+
 # Initialize exercises
 INITIAL_EXERCISES = [
     # Beginner Level
@@ -168,12 +189,11 @@ INITIAL_EXERCISES = [
     {"name": "One-Arm Rows", "description": "Unilateral pulling exercise. Row heavy weight with one arm while supporting body with other.", "level": "advanced"}
 ]
 
-# Add your routes to the router instead of directly to app
+# Routes
 @api_router.get("/")
 async def root():
     return {"message": "Silver Gym API is running"}
 
-# Routes
 @api_router.post("/auth/signup")
 async def signup(user_data: UserCreate):
     # Check if user exists
@@ -311,6 +331,14 @@ async def reset_payments(admin: bool = Depends(get_current_admin)):
     await db.users.update_many({}, {"$set": {"payment_status": PaymentStatus.UNPAID}})
     return {"message": "All payment statuses reset to unpaid"}
 
+@api_router.post("/admin/clear-workout-data")
+async def clear_workout_data(admin: bool = Depends(get_current_admin)):
+    # Clear all progress data
+    await db.progress.delete_many({})
+    # Reset all user stars to 0
+    await db.users.update_many({}, {"$set": {"total_stars": 0}})
+    return {"message": "All workout data cleared successfully"}
+
 @api_router.get("/admin/stats")
 async def get_admin_stats(admin: bool = Depends(get_current_admin)):
     total_users = await db.users.count_documents({})
@@ -337,6 +365,9 @@ async def init_database():
 @app.on_event("startup")
 async def startup_event():
     await init_database()
+    # Start the daily reset background task
+    asyncio.create_task(daily_reset_task())
+    print("Daily reset task started")
 
 # Include router
 app.include_router(api_router)
