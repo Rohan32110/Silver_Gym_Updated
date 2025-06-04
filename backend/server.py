@@ -262,6 +262,11 @@ async def get_user_dashboard(current_user: User = Depends(get_current_user)):
         "completed_date": {"$gte": today, "$lt": tomorrow}
     }).to_list(1000)
     
+    # Convert MongoDB ObjectId to string
+    for progress in today_progress:
+        if '_id' in progress:
+            progress['_id'] = str(progress['_id'])
+    
     completed_today = len(today_progress)
     
     # Get updated user data
