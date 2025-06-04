@@ -218,6 +218,10 @@ async def admin_login(admin_data: AdminLogin):
 @api_router.get("/exercises/{level}")
 async def get_exercises(level: ExerciseLevel, current_user: User = Depends(get_current_user)):
     exercises = await db.exercises.find({"level": level}).to_list(1000)
+    # Convert MongoDB ObjectId to string to make it JSON serializable
+    for exercise in exercises:
+        if '_id' in exercise:
+            exercise['_id'] = str(exercise['_id'])
     return exercises
 
 @api_router.post("/exercises/{exercise_id}/complete")
