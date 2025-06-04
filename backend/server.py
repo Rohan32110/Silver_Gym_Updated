@@ -272,6 +272,10 @@ async def get_user_dashboard(current_user: User = Depends(get_current_user)):
 @api_router.get("/admin/users")
 async def get_all_users(admin: bool = Depends(get_current_admin)):
     users = await db.users.find().to_list(1000)
+    # Convert MongoDB ObjectId to string to make it JSON serializable
+    for user in users:
+        if '_id' in user:
+            user['_id'] = str(user['_id'])
     return users
 
 @api_router.put("/admin/users/{user_id}")
