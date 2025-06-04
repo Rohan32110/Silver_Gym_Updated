@@ -259,6 +259,35 @@ class SilverGymAPITester:
         )
         return success
 
+    def test_clear_workout_data(self):
+        """Test clearing all workout data"""
+        success, response = self.run_test(
+            "Clear All Workout Data",
+            "POST",
+            "admin/clear-workout-data",
+            200,
+            token=self.admin_token
+        )
+        return success
+
+    def test_workout_data_cleared(self):
+        """Test that workout data was actually cleared"""
+        # First check user dashboard to verify stars are reset
+        success, dashboard = self.run_test(
+            "Check User Dashboard After Clear",
+            "GET",
+            "user/dashboard",
+            200,
+            token=self.user_token
+        )
+        
+        if not success or dashboard.get("total_stars", -1) != 0:
+            print(f"❌ User stars not reset to 0, current value: {dashboard.get('total_stars', 'unknown')}")
+            return False
+            
+        print("✅ User stars successfully reset to 0")
+        return True
+
     def test_delete_user(self):
         """Test deleting a user"""
         if not self.test_user_id:
@@ -340,6 +369,16 @@ def main():
     # Test resetting payments
     if not tester.test_reset_payments():
         print("❌ Reset payments failed, stopping tests")
+        return 1
+
+    # Test clearing workout data (new feature)
+    if not tester.test_clear_workout_data():
+        print("❌ Clear workout data failed, stopping tests")
+        return 1
+
+    # Test that workout data was actually cleared
+    if not tester.test_workout_data_cleared():
+        print("❌ Workout data not properly cleared, stopping tests")
         return 1
 
     # Test deleting user
