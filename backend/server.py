@@ -168,6 +168,11 @@ INITIAL_EXERCISES = [
     {"name": "One-Arm Rows", "description": "Unilateral pulling exercise. Row heavy weight with one arm while supporting body with other.", "level": "advanced"}
 ]
 
+# Add your routes to the router instead of directly to app
+@api_router.get("/")
+async def root():
+    return {"message": "Silver Gym API is running"}
+
 # Routes
 @api_router.post("/auth/signup")
 async def signup(user_data: UserCreate):
