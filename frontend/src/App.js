@@ -1017,6 +1017,7 @@ const AdminPanel = () => {
   const fetchStats = async () => {
     try {
       const response = await axios.get(`${API}/api/admin/stats`);
+      console.log("Stats response:", response.data);
       setStats(response.data);
     } catch (error) {
       console.error("Failed to fetch stats");
@@ -1184,7 +1185,7 @@ const AdminPanel = () => {
                           : "bg-red-500/20 text-red-400"
                       }`}
                     >
-                      {user.status.toUpperCase()}
+                      {(user.status || "pending").toUpperCase()}
                     </span>
 
                     {user.status === "approved" && (
