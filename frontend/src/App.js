@@ -25,7 +25,7 @@ import {
 import "./App.css";
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
-const API = `https://silvergym.com`;
+const API = `https://silvergymupdated-production.up.railway.app`;
 
 // Auth Context
 const AuthContext = React.createContext();
@@ -651,7 +651,7 @@ const Signup = () => {
     e.preventDefault();
     setLoading(true);
     try {
-      await axios.post(`${API}/auth/signup`, formData);
+      await axios.post(`${API}/api/auth/signup`, formData);
       setMessage("Registration successful! Please wait for admin approval.");
       setTimeout(() => navigate("/"), 2000);
     } catch (error) {
@@ -739,7 +739,7 @@ const Login = () => {
     e.preventDefault();
     setLoading(true);
     try {
-      const endpoint = isAdmin ? "/auth/admin/login" : "/auth/login";
+      const endpoint = isAdmin ? "/api/auth/admin/login" : "/api/auth/login";
       const response = await axios.post(`${API}${endpoint}`, formData);
 
       login(response.data.access_token, response.data.user);
