@@ -841,7 +841,7 @@ const Dashboard = () => {
 
   const fetchDashboardData = async () => {
     try {
-      const response = await axios.get(`${API}/user/dashboard`);
+      const response = await axios.get(`${API}/api/user/dashboard`);
       setDashboardData(response.data);
     } catch (error) {
       console.error("Failed to fetch dashboard data");
@@ -850,7 +850,7 @@ const Dashboard = () => {
 
   const fetchExercises = async () => {
     try {
-      const response = await axios.get(`${API}/exercises/${selectedLevel}`);
+      const response = await axios.get(`${API}/api/exercises/${selectedLevel}`);
       setExercises(response.data);
     } catch (error) {
       console.error("Failed to fetch exercises");
@@ -859,7 +859,7 @@ const Dashboard = () => {
 
   const completeExercise = async (exerciseId) => {
     try {
-      await axios.post(`${API}/exercises/${exerciseId}/complete`);
+      await axios.post(`${API}/api/exercises/${exerciseId}/complete`);
       setShowCongrats(true);
       setTimeout(() => setShowCongrats(false), 3000);
       fetchDashboardData();
@@ -1007,7 +1007,7 @@ const AdminPanel = () => {
 
   const fetchUsers = async () => {
     try {
-      const response = await axios.get(`${API}/admin/users`);
+      const response = await axios.get(`${API}/api/admin/users`);
       setUsers(response.data);
     } catch (error) {
       console.error("Failed to fetch users");
@@ -1016,7 +1016,7 @@ const AdminPanel = () => {
 
   const fetchStats = async () => {
     try {
-      const response = await axios.get(`${API}/admin/stats`);
+      const response = await axios.get(`${API}/api/admin/stats`);
       setStats(response.data);
     } catch (error) {
       console.error("Failed to fetch stats");
@@ -1025,7 +1025,7 @@ const AdminPanel = () => {
 
   const updateUser = async (userId, updateData) => {
     try {
-      await axios.put(`${API}/admin/users/${userId}`, updateData);
+      await axios.put(`${API}/api/admin/users/${userId}`, updateData);
       fetchUsers();
       fetchStats();
     } catch (error) {
@@ -1036,7 +1036,7 @@ const AdminPanel = () => {
   const deleteUser = async (userId) => {
     if (window.confirm("Are you sure you want to delete this user?")) {
       try {
-        await axios.delete(`${API}/admin/users/${userId}`);
+        await axios.delete(`${API}/api/admin/users/${userId}`);
         fetchUsers();
         fetchStats();
       } catch (error) {
@@ -1053,7 +1053,7 @@ const AdminPanel = () => {
     ) {
       setLoading(true);
       try {
-        await axios.post(`${API}/admin/reset-payments`);
+        await axios.post(`${API}/api/admin/reset-payments`);
         fetchUsers();
         fetchStats();
         alert("All payment statuses have been reset to unpaid");
@@ -1073,7 +1073,7 @@ const AdminPanel = () => {
     ) {
       setLoading(true);
       try {
-        await axios.post(`${API}/admin/clear-workout-data`);
+        await axios.post(`${API}/api/admin/clear-workout-data`);
         alert("All workout data has been cleared");
       } catch (error) {
         console.error("Failed to clear workout data");
