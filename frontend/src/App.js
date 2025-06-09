@@ -98,7 +98,7 @@ const Navbar = () => {
         <div className="flex justify-between items-center h-16">
           <Link
             to="/"
-            className="text-2xl font-bold bg-gradient-to-r from-gray-100 to-gray-300 bg-clip-text text-transparent"
+            className="text-2xl font-bold bg-gradient-to-r from-gray-200 via-gray-400 to-gray-500 bg-clip-text text-transparent"
           >
             Silver Gym
           </Link>
@@ -309,7 +309,7 @@ const Home = () => {
           <div className="text-center max-w-4xl mx-auto">
             <h1 className="text-6xl md:text-8xl font-bold mb-6">
               <span className="text-white">Transform Your Body at </span>
-              <span className="bg-gradient-to-r from-gray-100 to-gray-300 bg-clip-text text-transparent">
+              <span className="bg-gradient-to-r from-gray-200 via-gray-400 to-gray-500 bg-clip-text text-transparent">
                 Silver Gym
               </span>
             </h1>
@@ -426,7 +426,7 @@ const Home = () => {
           <div className="max-w-7xl mx-auto">
             <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
               <div>
-                <h3 className="text-2xl font-bold bg-gradient-to-r from-gray-100 to-gray-300 bg-clip-text text-transparent mb-4">
+                <h3 className="text-2xl font-bold bg-gradient-to-r from-gray-200 via-gray-400 to-gray-500 bg-clip-text text-transparent mb-4">
                   Silver Gym
                 </h3>
                 <p className="text-gray-400">
@@ -485,7 +485,7 @@ const Home = () => {
             </div>
             <div className="border-t border-white/10 mt-8 pt-8 text-center">
               <p className="text-gray-400">
-                &copy; 2024 Silver Gym. All rights reserved.
+                &copy; 2015 Silver Gym. All rights reserved.
               </p>
             </div>
           </div>
@@ -496,7 +496,7 @@ const Home = () => {
 };
 
 const About = () => (
-  <div className="min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-800 pt-16">
+  <div className="min-h-screen hero-gradient pt-16">
     <div className="max-w-4xl mx-auto px-4 py-20">
       <h1 className="text-5xl font-bold text-center mb-8 bg-gradient-to-r from-gray-100 to-gray-300 bg-clip-text text-transparent">
         About Silver Gym
@@ -515,7 +515,7 @@ const About = () => (
 );
 
 const Membership = () => (
-  <div className="min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-800 pt-16">
+  <div className="min-h-screen hero-gradient pt-16">
     <div className="max-w-4xl mx-auto px-4 py-20 text-center">
       <h1 className="text-5xl font-bold mb-8 bg-gradient-to-r from-gray-100 to-gray-300 bg-clip-text text-transparent">
         Membership
@@ -561,7 +561,7 @@ const Membership = () => (
 );
 
 const Trainers = () => (
-  <div className="min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-800 pt-16">
+  <div className="min-h-screen hero-gradient pt-16">
     <div className="max-w-6xl mx-auto px-4 py-20">
       <h1 className="text-5xl font-bold text-center mb-16 bg-gradient-to-r from-gray-100 to-gray-300 bg-clip-text text-transparent">
         Our Trainers
@@ -604,7 +604,7 @@ const Trainers = () => (
 );
 
 const Services = () => (
-  <div className="min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-800 pt-16">
+  <div className="min-h-screen hero-gradient pt-16">
     <div className="max-w-6xl mx-auto px-4 py-20">
       <h1 className="text-5xl font-bold text-center mb-16 bg-gradient-to-r from-gray-100 to-gray-300 bg-clip-text text-transparent">
         Our Services
@@ -877,7 +877,7 @@ const Dashboard = () => {
     );
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-800 pt-16">
+    <div className="min-h-screen hero-gradient pt-16">
       {showCongrats && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
           <div className="glass-card p-8 text-center congrats-modal">
